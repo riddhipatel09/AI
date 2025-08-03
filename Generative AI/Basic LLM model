@@ -7,7 +7,7 @@ receives response.text, adds it to the history, prints it, and repeats the cycle
 import { GoogleGenAI } from "@google/genai";
 import readLineSync from 'readline-sync';
 
-const ai = new GoogleGenAI({apiKey:"AIzaSyAjDfF6zvE2yOXrAII4yIPy3Zuh3o_ui_I"});
+const ai = new GoogleGenAI({apiKey:"YOUR_API_KEY"});
 
 const history = [];
 
