@@ -1,1 +1,61 @@
 
+
+// server.js
+import express from 'express';
+import { GoogleGenerativeAI } from '@google/genai';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
+
+const app = express();
+const port = 3000;
+
+// Middleware to serve static files from the 'public' directory
+app.use(express.static('public'));
+// Middleware to parse JSON request bodies
+app.use(express.json());
+
+// Initialize the Google GenAI client
+const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+// API endpoint for the chatbot
+app.post('/chat', async (req, res) => {
+    try {
+        const userInput = req.body.message;
+
+        const chat = await model.startChat({
+            history: [
+                {
+                    role: "user",
+                    parts: [{ text: "Hello" }],
+                },
+                {
+                    role: "model",
+                    parts: [{ text: "Hello! I am your DSA instructor. Ask me anything about Data Structures and Algorithms." }],
+                },
+            ],
+            generationConfig: {
+                maxOutputTokens: 200,
+            },
+        });
+
+        const result = await chat.sendMessage(userInput);
+        const response = result.response;
+        const text = response.text();
+        
+        res.json({ reply: text });
+
+    } catch (error) {
+        console.error('Error processing chat:', error);
+        res.status(500).json({ error: 'Something went wrong!' });
+    }
+});
+
+app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
+});
+
+
+
