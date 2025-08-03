@@ -1,0 +1,35 @@
+import { GoogleGenAI } from "@google/genai";
+import readLineSync from 'readline-sync';
+
+const ai = new GoogleGenAI({apiKey:"AIzaSyAjDfF6zvE2yOXrAII4yIPy3Zuh3o_ui_I"});
+
+const history = [];
+
+async function chatting(userProblem) {
+
+    history.push({
+        role:'user',
+        parts:[{text:userProblem}]
+    });
+
+  const response = await ai.models.generateContent({
+    model: "gemini-2.5-flash",
+    contents: history
+  });
+
+    history.push({
+        role:'model',
+        parts:[{text:response.text}]
+    });
+
+  console.log(response.text);
+}
+
+async function main(){
+    const userProblem = readLineSync.question("ask me anything==> ");
+    await chatting(userProblem);
+    main();
+}
+
+
+main();
