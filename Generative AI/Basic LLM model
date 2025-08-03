@@ -1,3 +1,9 @@
+//////////The code uses readline-sync to take user input, 
+stores messages in a history array, 
+sends this history to the GoogleGenAI client with the generateContent method of the gemini-2.5-flash model,
+receives response.text, adds it to the history, prints it, and repeats the cycle.
+
+==============================================================================================================================>
 import { GoogleGenAI } from "@google/genai";
 import readLineSync from 'readline-sync';
 
